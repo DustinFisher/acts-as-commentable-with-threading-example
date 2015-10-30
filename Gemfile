@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'acts_as_commentable_with_threading'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'devise'
 gem 'jbuilder', '~> 2.0'

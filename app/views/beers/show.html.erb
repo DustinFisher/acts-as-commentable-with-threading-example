@@ -1,0 +1,22 @@
+<div>
+  <h2><%= @beer.name %></h2>
+  <p><%= @beer.description %></p>
+</div>
+
+
+<h2>Comments:</h2>
+<div>
+  <% @beer.comment_threads.each do |comment| %>
+    <p><%= comment.body %></p>
+  <% end %>
+</div>
+
+<%= form_for @comment do |f| %>
+  <%= f.hidden_field :beer_id, value: @beer.id %>
+  <div class="field form-group">
+    <%= f.text_area :body, class: 'form-control' %>
+  </div>
+  <div class="field form-group">
+    <%= submit_tag "Post comment", class: 'btn btn-primary' %>
+  </div>
+<% end %>
