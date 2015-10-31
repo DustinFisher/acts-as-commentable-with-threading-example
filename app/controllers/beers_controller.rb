@@ -2,8 +2,9 @@ class BeersController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    @beer    = Beer.find(params[:id])
-    @comment = Comment.new
+    @beer           = Beer.find(params[:id])
+    @comment_count  = @beer.comment_threads.count == 0 ? "no" : @beer.comment_threads.count
+    @comment        = Comment.new
   end
 
   def new

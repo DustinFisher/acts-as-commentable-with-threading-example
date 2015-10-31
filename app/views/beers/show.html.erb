@@ -1,14 +1,11 @@
-<div>
+<div class="well">
   <h2><%= @beer.name %></h2>
   <p><%= @beer.description %></p>
 </div>
 
 
-<h2>Comments:</h2>
-<div>
-  <% @beer.comment_threads.each do |comment| %>
-    <p><%= comment.body %></p>
-  <% end %>
+<div class="comments-header">
+  <h4><%= @comment_count %> comments</h4>
 </div>
 
 <%= form_for @comment do |f| %>
@@ -20,3 +17,32 @@
     <%= submit_tag "Post comment", class: 'btn btn-primary' %>
   </div>
 <% end %>
+
+<div class="comments-container">
+  <% @beer.comment_threads.each do |comment| %>
+    <div class="comment">
+      <p><%= comment.body %><br></p>
+      <div class="comment-nav"><a href="#" class="comment-reply" data-id="<%= comment.id %>">reply</a></div>
+      <div class="reply-form">
+        <%= form_for @comment do |f| %>
+          <%= f.hidden_field :beer_id, value: @beer.id %>
+          <%= f.hidden_field :comment_id, value: comment.id %>
+          <div class="field form-group">
+            <%= f.text_area :body, class: 'form-control' %>
+          </div>
+          <div class="field form-group">
+            <%= submit_tag "Post Reply", class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  $(".comment-reply").click(function() {
+    $(this).closest(".comment").find(".reply-form").toggle();
+  });
+</script>
+
+
