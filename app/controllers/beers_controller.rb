@@ -3,8 +3,7 @@ class BeersController < ApplicationController
 
   def show
     @beer           = Beer.find(params[:id])
-    @comment_count  = @beer.comment_threads.count == 0 ? "no" : @beer.comment_threads.count
-    @comment        = Comment.new
+    @new_comment    = Comment.build_from(@beer, current_user.id, "")
   end
 
   def new

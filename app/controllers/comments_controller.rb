@@ -2,31 +2,42 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @beer = Beer.find(beer_params[:beer_id])
-    @body = body
-    @user_who_commented = current_user
-    @comment = Comment.build_from(@beer, @user_who_commented.id, @body)
-    @comment.save
-    make_child_comment
+    commentable = commentable_type.constantize.find(commentable_id)
+    @comment = Comment.build_from(commentable, current_user.id, body)
 
     respond_to do |format|
-      format.html  { redirect_to(beer_path(@beer),
-                     :notice => 'Comment was successfully added.') }
+      if @comment.save
+        make_child_comment
+        format.html  { redirect_to(:back, :notice => 'Comment was successfully added.') }
+      else
+        format.html  { render :action => "new" }
+      end
     end
+  end
+
+  def show
   end
 
   private
 
-  def beer_params
-    params.require(:comment).permit(:body, :beer_id, :comment_id)
+  def comment_params
+    params.require(:comment).permit(:body, :commentable_id, :commentable_type, :comment_id)
+  end
+
+  def commentable_type
+    comment_params[:commentable_type]
+  end
+
+  def commentable_id
+    comment_params[:commentable_id]
   end
 
   def comment_id
-    beer_params[:comment_id]
+    comment_params[:comment_id]
   end
 
   def body
-    beer_params[:body]
+    comment_params[:body]
   end
 
   def make_child_comment
